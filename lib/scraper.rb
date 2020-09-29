@@ -4,10 +4,12 @@ class Scraper
   def self.scrape_profile_page(psn_id)
 
     profile_data = Nokogiri::HTML(open(BASE_PATH + psn_id))
-    
+
     player = {}
 
-    player[:psn_id] = psn_id
+    player[:psn_id] = profile_data.css("span.username").text.strip #this gets the username with the correct capitalisation
+
+    player[:country] = profile_data.css("img.round-flags").attribute("title").text.gsub("<center style='font-size:11px;'>","").gsub("</center>","")
 
     player[:total_trophies] = profile_data.css("li.total").text.strip
 
