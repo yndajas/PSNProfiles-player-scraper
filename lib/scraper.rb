@@ -9,6 +9,8 @@ class Scraper
 
     player[:psn_id] = profile_data.css("span.username").text.strip #this gets the username with the correct capitalisation
 
+    player[:comment] = profile_data.css("span.comment").text if profile_data.css("span.comment").length > 0
+
     player[:country] = profile_data.css("img.round-flags").attribute("title").text.gsub("<center style='font-size:11px;'>","").gsub("</center>","")
 
     player[:total_trophies] = profile_data.css("li.total").text.strip
