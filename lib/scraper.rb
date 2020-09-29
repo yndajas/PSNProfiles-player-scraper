@@ -4,10 +4,12 @@ class Scraper
   def self.scrape_profile_page(psn_id)
 
     profile_data = Nokogiri::HTML(open(BASE_PATH + psn_id))
-
+    
     player = {}
 
     player[:psn_id] = psn_id
+
+    player[:total_trophies] = profile_data.css("li.total").text.strip
 
     # get row of eight stats near top of profile
 
@@ -26,6 +28,8 @@ class Scraper
     stats_flex_data.each_with_index do |stat, i|
       player[stats_flex_data_keys[i]] = stat
     end
+
+    binding.pry
 
     player
   end
