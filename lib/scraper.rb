@@ -11,6 +11,12 @@ class Scraper
 
     player[:comment] = profile_data.css("span.comment").text if profile_data.css("span.comment").length > 0
 
+    player[:level] = profile_data.css("li.icon-sprite.level").text
+
+    player[:level_progress] = profile_data.css("div.progress-bar.level div").attribute("style").value.gsub("width: ","").gsub(";","")
+
+    player[:next_level_in] = profile_data.search('script[type="text/javascript"]')[12].children.to_s.strip.gsub(/.*( in <b>)/,"").gsub("\n","").gsub(/(<\/b>).*/,"") + " points"
+
     player[:country] = profile_data.css("img.round-flags").attribute("title").text.gsub("<center style='font-size:11px;'>","").gsub("</center>","")
 
     player[:total_trophies] = profile_data.css("li.total").text.strip
