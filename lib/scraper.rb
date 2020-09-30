@@ -67,7 +67,31 @@ class Scraper
 
     # get recent games
 
-    ## game, N of N trophies, latest trophy date, platinum/completion time (if platinumed/completed), platform, platinumed (check which icon shows), g/s/b, completion percentage, platinum rarity, completion rate (if it exists, i.e. if it's not 1:1 with platinum rate/if there's DLC or no platinum)
+    ## ADD: latest trophy date, platinum/completion time (if platinumed/completed), platform, platinumed (check which icon shows), g/s/b, completion percentage, platinum rarity, completion rate (if it exists, i.e. if it's not 1:1 with platinum rate/if there's DLC or no platinum)
+
+    recent_games = []
+
+    recent_games_scrape = profile_data.css('[id="gamesTable"] tr')
+
+    if recent_games_scrape.length < 12 # create empty hashes for up to 12 recent games
+      recent_games_scrape.length.times {recent_games << {}}
+    else
+      12.times {recent_games << {}}
+    end
+
+    recent_games_scrape[0..11].each_with_index do |game, i| # iterate over the most recent 12 games (`[0..11]` creates a subarray)
+      recent_games[i][:game] = game.css("a.title").text
+
+      if game.css("div.small-info")[0].text.strip[0..2] == "All" # if the trophy count text starts "All", earned and available are both taken from the first bold tag, otherwise the first and second respectively
+        recent_games[i][:earned_trophies] = game.css("div.small-info b")[0].text
+        recent_games[i][:available_trophies] = game.css("div.small-info b")[0].text
+      else
+        recent_games[i][:earned_trophies] = game.css("div.small-info b")[0].text
+        recent_games[i][:available_trophies] = game.css("div.small-info b")[1].text
+      end
+    end
+
+    player[:recent_games] = recent_games
 
     binding.pry
 
