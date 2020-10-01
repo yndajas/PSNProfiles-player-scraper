@@ -67,7 +67,7 @@ class Scraper
 
     # get recent games
 
-    ## ADD: g/s/b, completion percentage, platinum rarity, completion rate (if it exists, i.e. if it's not 1:1 with platinum rate/if there's DLC or no platinum)
+    ## ADD: g/s/b, platinum rarity, completion rate (if it exists, i.e. if it's not 1:1 with platinum rate/if there's DLC or no platinum)
 
     recent_games = []
 
@@ -89,6 +89,8 @@ class Scraper
       else
         recent_games[i][:platform] = game.css("span.tag.platform").text
       end
+
+      recent_games[i][:completion] = game.css("div.progress-bar").text.strip
 
       platinum_class = game.css("img.icon-sprite").attribute("class").value
 
