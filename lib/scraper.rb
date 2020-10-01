@@ -216,7 +216,6 @@ class Scraper
 
     player[:completion_breakdown] = completion_breakdown
 
-
     binding.pry
 
     player

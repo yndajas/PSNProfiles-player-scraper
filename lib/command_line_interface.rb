@@ -9,7 +9,7 @@ class CommandLineInterface
     # export to XML:
     # def export(player, path, format)
       # File.write(path, player.to_xml) if format.upcase == "XML"
-      # File.write(path, player.to_json) if format.upcase == "JSON"
+      # File.write(path, JSON.pretty_generate(player)) if format.upcase == "JSON"
     # end
   end
 end
