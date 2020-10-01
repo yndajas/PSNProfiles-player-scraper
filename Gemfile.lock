@@ -1,9 +1,21 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (6.0.3.3)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+      zeitwerk (~> 2.2, >= 2.2.2)
+    builder (3.2.4)
     coderay (1.1.3)
+    concurrent-ruby (1.1.5)
+    i18n (1.6.0)
+      concurrent-ruby (~> 1.0)
+    json (2.3.1)
     method_source (1.0.0)
     mini_portile2 (2.4.0)
+    minitest (5.11.3)
     nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     nokogiri (1.10.8-x64-mingw32)
@@ -12,12 +24,19 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     require_all (3.0.0)
+    thread_safe (0.3.6)
+    tzinfo (1.2.7)
+      thread_safe (~> 0.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
   x64-mingw32
 
 DEPENDENCIES
+  activesupport
+  builder
+  json
   nokogiri
   pry
   require_all

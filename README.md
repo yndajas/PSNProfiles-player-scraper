@@ -6,10 +6,11 @@ Scrapes and presents data from PSNProfiles player pages using a CLI
 
 - install Ruby
 - `gem install bundler`
-- `bundler`
+- `cd` into PSNProfiles-profile-scraper directory
+- `bundle install`
 
 ## Usage
 
-- make sure you're `cd`ed into the PSNProfiles-profile-scraper folder
+- make sure you're `cd`ed into the PSNProfiles-profile-scraper directory
 - `ruby bin/scrape`
 - enter a PSN ID
