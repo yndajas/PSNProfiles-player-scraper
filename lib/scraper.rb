@@ -66,9 +66,7 @@ class Scraper
     player[:recent_trophies] = recent_trophies
 
     # get recent games
-
-    ## ADD: platinum rarity, completion rate (if it exists, i.e. if it's not 1:1 with platinum rate/if there's DLC or no platinum)
-
+    
     recent_games = []
 
     recent_games_scrape = profile_data.css('[id="gamesTable"] tr')
@@ -125,6 +123,13 @@ class Scraper
         ## check if text is platinum or complete and fill in separate attribute based on which it is
       else
         recent_games[i][:latest_trophy_date] = game.css("div.small-info")[1].text.strip
+      end
+
+      completion_rates = game.css("span.separator.completion-status span")
+
+      completion_rates.each do |completion_rate|
+        completion_type = completion_rate.attribute("class").value
+        completion_type[0] == "p" ? recent_games[i][:platinum_rarity] = completion_rate.text : recent_games[i][:completion_rarity] = completion_rate.text
       end
     end
 
