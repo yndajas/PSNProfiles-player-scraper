@@ -67,7 +67,7 @@ class Scraper
 
     # get recent games
 
-    ## ADD: latest trophy date, platinum/completion time (if platinumed/completed), platform, platinumed (check which icon shows), g/s/b, completion percentage, platinum rarity, completion rate (if it exists, i.e. if it's not 1:1 with platinum rate/if there's DLC or no platinum)
+    ## ADD: g/s/b, completion percentage, platinum rarity, completion rate (if it exists, i.e. if it's not 1:1 with platinum rate/if there's DLC or no platinum)
 
     recent_games = []
 
@@ -82,12 +82,44 @@ class Scraper
     recent_games_scrape[0..11].each_with_index do |game, i| # iterate over the most recent 12 games (`[0..11]` creates a subarray)
       recent_games[i][:game] = game.css("a.title").text
 
+      if game.css("span.tag.platform").length > 1
+        platforms = []
+        game.css("span.tag.platform").each {|platform| platforms << platform.text}
+        recent_games[i][:platform] = platforms.join("/")
+      else
+        recent_games[i][:platform] = game.css("span.tag.platform").text
+      end
+
+      platinum_class = game.css("img.icon-sprite").attribute("class").value
+
+      if platinum_class[12] == "c"
+        recent_games[i][:platinumed] = "not applicable (game has no platinum)"
+      elsif platinum_class[-6..-1] == "earned"
+        recent_games[i][:platinumed] = "yes"
+      else
+        recent_games[i][:platinumed] = "no"
+      end
+
+      # gsb
+
       if game.css("div.small-info")[0].text.strip[0..2] == "All" # if the trophy count text starts "All", earned and available are both taken from the first bold tag, otherwise the first and second respectively
         recent_games[i][:earned_trophies] = game.css("div.small-info b")[0].text
         recent_games[i][:available_trophies] = game.css("div.small-info b")[0].text
       else
         recent_games[i][:earned_trophies] = game.css("div.small-info b")[0].text
         recent_games[i][:available_trophies] = game.css("div.small-info b")[1].text
+      end
+
+      if game.css("div.small-info")[1].css("bullet").length > 0
+        ## scrape last trophy date before bullet and time to complete/platinum after bullet
+        recent_games[i][:latest_trophy_date] = game.css("div.small-info")[1].text.strip.gsub(/\n.*/,"")
+
+        speed_text = game.css("div.small-info")[1].text.strip.gsub("\n","").gsub(/.*(\u2022)/,"").gsub("\t","").strip.gsub("                                           ","")
+        recent_games[i][:speedrun_type] = speed_text.gsub(/ .*/,"")
+        recent_games[i][:speedrun_time] = speed_text.gsub(/.* in /,"")
+        ## check if text is platinum or complete and fill in separate attribute based on which it is
+      else
+        recent_games[i][:latest_trophy_date] = game.css("div.small-info")[1].text.strip
       end
     end
 
