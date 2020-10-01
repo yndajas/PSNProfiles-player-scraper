@@ -67,7 +67,7 @@ class Scraper
 
     # get recent games
 
-    ## ADD: g/s/b, platinum rarity, completion rate (if it exists, i.e. if it's not 1:1 with platinum rate/if there's DLC or no platinum)
+    ## ADD: platinum rarity, completion rate (if it exists, i.e. if it's not 1:1 with platinum rate/if there's DLC or no platinum)
 
     recent_games = []
 
@@ -90,19 +90,22 @@ class Scraper
         recent_games[i][:platform] = game.css("span.tag.platform").text
       end
 
-      recent_games[i][:completion] = game.css("div.progress-bar").text.strip
-
       platinum_class = game.css("img.icon-sprite").attribute("class").value
 
       if platinum_class[12] == "c"
         recent_games[i][:platinumed] = "not applicable (game has no platinum)"
       elsif platinum_class[-6..-1] == "earned"
-        recent_games[i][:platinumed] = "yes"
+        recent_games[i][:platinumed] = "1"
       else
-        recent_games[i][:platinumed] = "no"
+        recent_games[i][:platinumed] = "0"
       end
 
-      # gsb
+      gsb_and_completion = game.css("div.trophy-count div span")
+
+      recent_games[i][:golds] = gsb_and_completion[1].text
+      recent_games[i][:silvers] = gsb_and_completion[3].text
+      recent_games[i][:bronzes] = gsb_and_completion[5].text
+      recent_games[i][:completion] = gsb_and_completion[6].text
 
       if game.css("div.small-info")[0].text.strip[0..2] == "All" # if the trophy count text starts "All", earned and available are both taken from the first bold tag, otherwise the first and second respectively
         recent_games[i][:earned_trophies] = game.css("div.small-info b")[0].text
