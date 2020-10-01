@@ -66,7 +66,7 @@ class Scraper
     player[:recent_trophies] = recent_trophies
 
     # get recent games
-    
+
     recent_games = []
 
     recent_games_scrape = profile_data.css('[id="gamesTable"] tr')
@@ -129,11 +129,93 @@ class Scraper
 
       completion_rates.each do |completion_rate|
         completion_type = completion_rate.attribute("class").value
-        completion_type[0] == "p" ? recent_games[i][:platinum_rarity] = completion_rate.text : recent_games[i][:completion_rarity] = completion_rate.text
+        completion_type[0] == "p" ? recent_games[i][:PSNProfiles_platinum_rarity] = completion_rate.text : recent_games[i][:PSNProfiles_completion_rarity] = completion_rate.text
       end
     end
 
     player[:recent_games] = recent_games
+
+    # get rarest trophies
+
+    rarest_trophies = []
+
+    rarest_trophies_scrape = profile_data.css("div.sidebar.col-xs-4 div.box.no-top-border tr")
+
+    rarest_trophies_scrape.length.times {rarest_trophies << {}}
+
+    rarest_trophies_scrape.each_with_index do |trophy, i|
+      rarest_trophies[i][:trophy] = trophy.css("td")[1].css("a")[0].text
+      rarest_trophies[i][:game] = trophy.css("td")[1].css("a")[1].text
+      rarest_trophies[i][:PSNProfiles_rarity] = trophy.css("td")[2].css("span")[0].text
+      rarest_trophies[i][:type] = trophy.css("td")[3].css("img").attribute("title").value
+    end
+
+    player[:rarest_trophies] = rarest_trophies
+
+    # get data from /stats page
+
+    stats_data = Nokogiri::HTML(open(BASE_PATH + psn_id + "/stats"))
+
+    trophies_by_platform = []
+
+    trophies_by_platform_scrape = stats_data.css("div.col-xs-4")[0].css("ul.legend li")
+
+    trophies_by_platform_scrape.length.times {trophies_by_platform << {}}
+
+    trophies_by_platform_scrape.each_with_index do |platform, i|
+      trophies_by_platform[i][:platform] = platform.text.gsub(/\(.*/,"").strip
+      trophies_by_platform[i][:trophies] = platform.text.gsub(/.*\(/,"").gsub(")","")
+    end
+
+    player[:trophies_by_platform] = trophies_by_platform
+
+    trophies_by_type = [{},{},{},{}]
+
+    trophies_by_type_scrape = stats_data.css("div.col-xs-4")[1].css("ul.legend li")
+
+    trophies_by_type_scrape.each_with_index do |type, i|
+      trophies_by_type[i][:type] = type.text.gsub(/\(.*/,"").strip
+      trophies_by_type[i][:trophies] = type.text.gsub(/.*\(/,"").gsub(")","")
+    end
+
+    player[:trophies_by_type] = trophies_by_type
+
+    rarity_breakdown = {:average_rarity => "",:trophies_by_rarity => [{},{},{},{},{}]}
+
+    rarity_breakdown[:average_rarity] = stats_data.css("div.col-xs-4")[3].css("div.col-xs-6 span.typo-top").text
+
+    trophies_by_rarity_scrape = stats_data.css("div.col-xs-4")[3].css("ul.legend li")
+
+    trophies_by_rarity_scrape.each_with_index do |rarity_type, i|
+      rarity_breakdown[:trophies_by_rarity][i][:rarity_type] = rarity_type.text.gsub(/\(.*/,"").strip
+      rarity_breakdown[:trophies_by_rarity][i][:trophies] = rarity_type.text.gsub(/.*\(/,"").gsub(")","")
+    end
+
+    rarity_breakdown[:trophies_by_rarity].each do |rarity_hash|
+      rarity_hash[:rarity_type] = "0 - 4.99% ('" + rarity_hash[:rarity_type] + "')" if rarity_hash[:rarity_type] == "Ultra Rare"
+      rarity_hash[:rarity_type] = "5 - 9.99% ('" + rarity_hash[:rarity_type] + "')" if rarity_hash[:rarity_type] == "Very Rare"
+      rarity_hash[:rarity_type] = "10 - 19.99% ('" + rarity_hash[:rarity_type] + "')" if rarity_hash[:rarity_type] == "Rare"
+      rarity_hash[:rarity_type] = "20 - 49.99% ('" + rarity_hash[:rarity_type] + "')" if rarity_hash[:rarity_type] == "Uncommon"
+      rarity_hash[:rarity_type] = "50 - 100% ('" + rarity_hash[:rarity_type] + "')"  if rarity_hash[:rarity_type] == "Common"
+    end
+
+    player[:rarity_breakdown] = rarity_breakdown
+
+    # average completion/completion ranges
+
+    completion_breakdown = {:average_completion => "",:trophies_by_completion => [{},{},{},{},{}]}
+
+    completion_breakdown[:average_completion] = stats_data.css("div.col-xs-4")[4].css("div.col-xs-6 span.typo-top").text
+
+    trophies_by_completion_scrape = stats_data.css("div.col-xs-4")[4].css("ul.legend li")
+
+    trophies_by_completion_scrape.each_with_index do |completion_range, i|
+      completion_breakdown[:trophies_by_completion][i][:completion_range] = completion_range.text.gsub(/\(.*/,"").strip
+      completion_breakdown[:trophies_by_completion][i][:trophies] = completion_range.text.gsub(/.*\(/,"").gsub(")","")
+    end
+
+    player[:completion_breakdown] = completion_breakdown
+
 
     binding.pry
 
