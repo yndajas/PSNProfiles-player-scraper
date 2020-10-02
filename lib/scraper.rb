@@ -43,7 +43,7 @@ class Scraper
 
     stats_flex_data.delete_at(5) # delete (unwanted) profile views count
 
-    stats_flex_data_keys = [:games_played, :completed_games, :completion_rate, :unearned_trophies, :trophies_per_day, :world_rank, :country_rank]
+    stats_flex_data_keys = [:games_played, :completed_games, :overall_completion, :unearned_trophies, :trophies_per_day, :world_rank, :country_rank]
 
     stats_flex_data.each_with_index do |stat, i|
       player[stats_flex_data_keys[i]] = stat
@@ -91,11 +91,11 @@ class Scraper
       platinum_class = game.css("img.icon-sprite").attribute("class").value
 
       if platinum_class[12] == "c"
-        recent_games[i][:platinumed] = "not applicable (game has no platinum)"
+        recent_games[i][:platinum] = "not applicable (game has no platinum)"
       elsif platinum_class[-6..-1] == "earned"
-        recent_games[i][:platinumed] = "1"
+        recent_games[i][:platinum] = "1"
       else
-        recent_games[i][:platinumed] = "0"
+        recent_games[i][:platinum] = "0"
       end
 
       gsb_and_completion = game.css("div.trophy-count div span")
@@ -158,18 +158,18 @@ class Scraper
 
     stats_data = Nokogiri::HTML(open(BASE_PATH + psn_id + "/stats"))
 
-    trophies_by_platform = []
+    games_by_platform = []
 
-    trophies_by_platform_scrape = stats_data.css("div.col-xs-4")[0].css("ul.legend li")
+    games_by_platform_scrape = stats_data.css("div.col-xs-4")[0].css("ul.legend li")
 
-    trophies_by_platform_scrape.length.times {trophies_by_platform << {}}
+    games_by_platform_scrape.length.times {games_by_platform << {}}
 
-    trophies_by_platform_scrape.each_with_index do |platform, i|
-      trophies_by_platform[i][:platform] = platform.text.gsub(/\(.*/,"").strip
-      trophies_by_platform[i][:trophies] = platform.text.gsub(/.*\(/,"").gsub(")","")
+    games_by_platform_scrape.each_with_index do |platform, i|
+      games_by_platform[i][:platform] = platform.text.gsub(/\(.*/,"").strip
+      games_by_platform[i][:trophies] = platform.text.gsub(/.*\(/,"").gsub(")","")
     end
 
-    player[:trophies_by_platform] = trophies_by_platform
+    player[:games_by_platform] = games_by_platform
 
     trophies_by_type = [{},{},{},{}]
 
@@ -188,17 +188,17 @@ class Scraper
 
     trophies_by_rarity_scrape = stats_data.css("div.col-xs-4")[3].css("ul.legend li")
 
-    trophies_by_rarity_scrape.each_with_index do |rarity_type, i|
-      rarity_breakdown[:trophies_by_rarity][i][:rarity_type] = rarity_type.text.gsub(/\(.*/,"").strip
-      rarity_breakdown[:trophies_by_rarity][i][:trophies] = rarity_type.text.gsub(/.*\(/,"").gsub(")","")
+    trophies_by_rarity_scrape.each_with_index do |rarity_band, i|
+      rarity_breakdown[:trophies_by_rarity][i][:rarity_band] = rarity_band.text.gsub(/\(.*/,"").strip
+      rarity_breakdown[:trophies_by_rarity][i][:trophies] = rarity_band.text.gsub(/.*\(/,"").gsub(")","")
     end
 
     rarity_breakdown[:trophies_by_rarity].each do |rarity_hash|
-      rarity_hash[:rarity_type] = "0 - 4.99% ('" + rarity_hash[:rarity_type] + "')" if rarity_hash[:rarity_type] == "Ultra Rare"
-      rarity_hash[:rarity_type] = "5 - 9.99% ('" + rarity_hash[:rarity_type] + "')" if rarity_hash[:rarity_type] == "Very Rare"
-      rarity_hash[:rarity_type] = "10 - 19.99% ('" + rarity_hash[:rarity_type] + "')" if rarity_hash[:rarity_type] == "Rare"
-      rarity_hash[:rarity_type] = "20 - 49.99% ('" + rarity_hash[:rarity_type] + "')" if rarity_hash[:rarity_type] == "Uncommon"
-      rarity_hash[:rarity_type] = "50 - 100% ('" + rarity_hash[:rarity_type] + "')"  if rarity_hash[:rarity_type] == "Common"
+      rarity_hash[:rarity_band] = "0 - 4.99% ('" + rarity_hash[:rarity_band] + "')" if rarity_hash[:rarity_band] == "Ultra Rare"
+      rarity_hash[:rarity_band] = "5 - 9.99% ('" + rarity_hash[:rarity_band] + "')" if rarity_hash[:rarity_band] == "Very Rare"
+      rarity_hash[:rarity_band] = "10 - 19.99% ('" + rarity_hash[:rarity_band] + "')" if rarity_hash[:rarity_band] == "Rare"
+      rarity_hash[:rarity_band] = "20 - 49.99% ('" + rarity_hash[:rarity_band] + "')" if rarity_hash[:rarity_band] == "Uncommon"
+      rarity_hash[:rarity_band] = "50 - 100% ('" + rarity_hash[:rarity_band] + "')"  if rarity_hash[:rarity_band] == "Common"
     end
 
     player[:rarity_breakdown] = rarity_breakdown
@@ -211,9 +211,9 @@ class Scraper
 
     trophies_by_completion_scrape = stats_data.css("div.col-xs-4")[4].css("ul.legend li")
 
-    trophies_by_completion_scrape.each_with_index do |completion_range, i|
-      completion_breakdown[:trophies_by_completion][i][:completion_range] = completion_range.text.gsub(/\(.*/,"").strip
-      completion_breakdown[:trophies_by_completion][i][:trophies] = completion_range.text.gsub(/.*\(/,"").gsub(")","")
+    trophies_by_completion_scrape.each_with_index do |completion_band, i|
+      completion_breakdown[:trophies_by_completion][i][:completion_band] = completion_band.text.gsub(/\(.*/,"").strip
+      completion_breakdown[:trophies_by_completion][i][:trophies] = completion_band.text.gsub(/.*\(/,"").gsub(")","")
     end
 
     player[:completion_breakdown] = completion_breakdown
@@ -222,8 +222,8 @@ class Scraper
 
     player[:first_trophy] = {}
 
-    player[:first_trophy][:game] = first_trophy_data.css("img.game")[0].attribute("title").value
     player[:first_trophy][:trophy] = first_trophy_data.css("a.title")[0].text
+    player[:first_trophy][:game] = first_trophy_data.css("img.game")[0].attribute("title").value
     player[:first_trophy][:description] = first_trophy_data.css("td")[2].text.gsub(player[:first_trophy][:trophy],"").strip
     player[:first_trophy][:time] = DateTime.parse(first_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
 
@@ -231,8 +231,8 @@ class Scraper
 
     player[:latest_trophy] = {}
 
-    player[:latest_trophy][:game] = latest_trophy_data.css("img.game")[0].attribute("title").value
     player[:latest_trophy][:trophy] = latest_trophy_data.css("a.title")[0].text
+    player[:latest_trophy][:game] = latest_trophy_data.css("img.game")[0].attribute("title").value
     player[:latest_trophy][:description] = latest_trophy_data.css("td")[2].text.gsub(player[:latest_trophy][:trophy],"").strip
     player[:latest_trophy][:time] = DateTime.parse(latest_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
 
