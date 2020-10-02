@@ -113,7 +113,9 @@ class Scraper
         recent_games[i][:available_trophies] = game.css("div.small-info b")[1].text
       end
 
-      if game.css("div.small-info")[1].css("bullet").length > 0
+      if game.css("div.small-info")[1] == nil
+        recent_games[i][:latest_trophy_date] = "not applicable (no trophies earned)"
+      elsif game.css("div.small-info")[1].css("bullet").length > 0
         ## scrape last trophy date before bullet and time to complete/platinum after bullet
         recent_games[i][:latest_trophy_date] = game.css("div.small-info")[1].text.strip.gsub(/\n.*/,"")
 
@@ -215,6 +217,26 @@ class Scraper
     end
 
     player[:completion_breakdown] = completion_breakdown
+
+    first_trophy_data = Nokogiri::HTML(open(BASE_PATH + psn_id + "/log?dir=asc"))
+
+    player[:first_trophy] = {}
+
+    player[:first_trophy][:game] = first_trophy_data.css("img.game")[0].attribute("title").value
+    player[:first_trophy][:trophy] = first_trophy_data.css("a.title")[0].text
+    player[:first_trophy][:description] = first_trophy_data.css("td")[2].text.gsub(player[:first_trophy][:trophy],"").strip
+    player[:first_trophy][:time] = DateTime.parse(first_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
+
+    latest_trophy_data = Nokogiri::HTML(open(BASE_PATH + psn_id + "/log"))
+
+    player[:latest_trophy] = {}
+
+    player[:latest_trophy][:game] = latest_trophy_data.css("img.game")[0].attribute("title").value
+    player[:latest_trophy][:trophy] = latest_trophy_data.css("a.title")[0].text
+    player[:latest_trophy][:description] = latest_trophy_data.css("td")[2].text.gsub(player[:latest_trophy][:trophy],"").strip
+    player[:latest_trophy][:time] = DateTime.parse(latest_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
+
+    player[:length_of_service] = TimeDifference.between(player[:first_trophy][:time],player[:latest_trophy][:time]).humanize
 
     binding.pry
 

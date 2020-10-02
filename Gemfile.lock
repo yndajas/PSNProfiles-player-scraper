@@ -25,6 +25,8 @@ GEM
       method_source (~> 1.0)
     require_all (3.0.0)
     thread_safe (0.3.6)
+    time_difference (0.5.0)
+      activesupport
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     zeitwerk (2.4.0)
@@ -40,6 +42,7 @@ DEPENDENCIES
   nokogiri
   pry
   require_all
+  time_difference
 
 BUNDLED WITH
    2.0.1
