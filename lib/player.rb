@@ -8,12 +8,14 @@ class Player
   @@all = []
 
   def initialize(player_data)
-    @psn_id = psn_id
+    @psn_id = player_data[:psn_id]
 
-    @average_rarity = self.rarity_breakdown[:average_rarity]
-    @average_completion = self.completion_breakdown[:average_completion]
-    @trophies_by_rarity = self.rarity_breakdown[:trophies_by_rarity]
-    @trophies_by_completion = self.completion_breakdown[:trophies_by_completion]
+
+
+    @average_rarity = player_data[:rarity_breakdown][:average_rarity]
+    @average_completion = player_data[:completion_breakdown][:average_completion]
+    @trophies_by_rarity = player_data[:rarity_breakdown][:trophies_by_rarity]
+    @trophies_by_completion = player_data[:completion_breakdown][:trophies_by_completion]
 
     @@all << self
   end
