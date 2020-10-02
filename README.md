@@ -91,7 +91,7 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
 * 20 - 49.99% ('Uncommon')
 * 50 - 100% ('Common')
 
-<sup>6</sup> ~20% groups as per PSNProfiles:
+<sup>6</sup> completion bands as per PSNProfiles:
 * 80 - 100%
 * 60 - 79.99%
 * 40 - 59.99%
