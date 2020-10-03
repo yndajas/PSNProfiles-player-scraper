@@ -1,10 +1,15 @@
 class Scraper
   BASE_PATH = "https://psnprofiles.com/"
 
-  def self.scrape_profile_page(psn_id)
+  def self.open(psn_id)
+    Nokogiri::HTML(OpenURI.open_uri(BASE_PATH + psn_id))
+  end
 
-    profile_data = Nokogiri::HTML(open(BASE_PATH + psn_id))
+  def self.valid?(profile)
+    profile.css("span.username").length == 0 ? false : true
+  end
 
+  def self.scrape(profile_data)
     player = {}
 
     # get data from top row (including mouseover extras)
@@ -156,7 +161,7 @@ class Scraper
 
     # get data from /stats page
 
-    stats_data = Nokogiri::HTML(open(BASE_PATH + psn_id + "/stats"))
+    stats_data = Nokogiri::HTML(OpenURI.open_uri(BASE_PATH + player[:psn_id] + "/stats"))
 
     games_by_platform = []
 
@@ -218,7 +223,7 @@ class Scraper
 
     player[:completion_breakdown] = completion_breakdown
 
-    first_trophy_data = Nokogiri::HTML(open(BASE_PATH + psn_id + "/log?dir=asc"))
+    first_trophy_data = Nokogiri::HTML(OpenURI.open_uri(BASE_PATH + player[:psn_id] + "/log?dir=asc"))
 
     player[:first_trophy] = {}
 
@@ -227,7 +232,7 @@ class Scraper
     player[:first_trophy][:description] = first_trophy_data.css("td")[2].text.gsub(player[:first_trophy][:trophy],"").strip
     player[:first_trophy][:time] = DateTime.parse(first_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
 
-    latest_trophy_data = Nokogiri::HTML(open(BASE_PATH + psn_id + "/log"))
+    latest_trophy_data = Nokogiri::HTML(OpenURI.open_uri(BASE_PATH + player[:psn_id] + "/log"))
 
     player[:latest_trophy] = {}
 

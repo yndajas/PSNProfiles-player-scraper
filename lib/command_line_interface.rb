@@ -5,9 +5,7 @@ class CommandLineInterface
     puts "\nWelcome to the PSNProfiles player scraper!"
     puts "\nPlease enter a PSN ID:"
 
-    psn_id = gets.strip # Scraper.validate (create this method)
-    player_data = Scraper.scrape_profile_page(psn_id)
-    self.player = Player.new(player_data)
+    self.player = Player.new(self.valid_profile_data)
 
     puts "\nPlayer successfully scraped!"
 
@@ -32,13 +30,27 @@ class CommandLineInterface
     elsif choice == "3"
       puts "\nEnter the PSN ID of the player you wish to compare with"
 
-      psn_id_2 = gets.strip # Scraper.validate (create this method)
-      player_data_2 = Scraper.scrape_profile_page(psn_id_2)
-      self.player_2 = Player.new(player_data_2)
-
-      binding.pry
+      self.player_2 = Player.new(self.valid_profile_data)
 
       Player.compare(self.player, self.player_2, self)
     end
+  end
+
+  def valid_profile_data
+    psn_id = gets.strip
+
+    profile = Scraper.open(psn_id)
+    valid = Scraper.valid?(profile)
+
+    until valid == true
+      puts "\nInvalid PSN ID. Please try again or refer to note (1) of the README for reasons you might be seeing this error"
+      psn_id = gets.strip
+      profile = Scraper.open(psn_id)
+      valid = Scraper.valid?(profile)
+    end
+
+    player_data = Scraper.scrape(profile)
+
+    player_data
   end
 end

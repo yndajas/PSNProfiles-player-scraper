@@ -70,7 +70,7 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
   * PSNProfiles rarity
   * type
 
-### Notes
+## Notes
 
 <sup>1</sup> the player must have been pre-scraped/updated by PSNProfiles. Once a player's data has been scraped for the first time by PSNProfiles, it will automatically be updated every 6 hours for the website's premium members, every 24 hours for regular members and every week for unregistered (but tracked) players. Data can be manually updated via the PSNProfiles homepage more frequently: once per minute for premium members and once per hour for everyone else. However, if a profile hasn't been manually updated in a while (the past month?), automatic updates will be suspended.
 
