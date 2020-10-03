@@ -130,14 +130,14 @@ class Scraper
         recent_games[i][:latest_trophy_date] = "not applicable (no trophies earned)"
       elsif game.css("div.small-info")[1].css("bullet").length > 0
         ## scrape last trophy date before bullet and time to complete/platinum after bullet
-        recent_games[i][:latest_trophy_date] = game.css("div.small-info")[1].text.strip.gsub(/\n.*/,"")
+        recent_games[i][:latest_trophy_date] = DateTime.parse(game.css("div.small-info")[1].text.strip.gsub(/\n.*/,""))
 
         speed_text = game.css("div.small-info")[1].text.strip.gsub("\n","").gsub(/.*(\u2022)/,"").gsub("\t","").strip.gsub("                                           ","")
-        recent_games[i][:speedrun_type] = speed_text.gsub(/ .*/,"")
-        recent_games[i][:speedrun_time] = speed_text.gsub(/.* in /,"")
+        recent_games[i][:speedrun_type] = speed_text.gsub(/ .*/,"") == "Completed" ? "Completion" : "Platinum"
+        recent_games[i][:speedrun_time] = speed_text.gsub(/.* in /,"").gsub(",", " and")
         ## check if text is platinum or complete and fill in separate attribute based on which it is
       else
-        recent_games[i][:latest_trophy_date] = game.css("div.small-info")[1].text.strip
+        recent_games[i][:latest_trophy_date] = DateTime.parse(game.css("div.small-info")[1].text.strip)
       end
 
       completion_rates = game.css("span.separator.completion-status span")
@@ -218,15 +218,15 @@ class Scraper
 
     # average completion/completion ranges
 
-    completion_breakdown = {:average_completion => "",:trophies_by_completion => [{},{},{},{},{}]}
+    completion_breakdown = {:average_completion => "",:games_by_completion => [{},{},{},{},{}]}
 
     completion_breakdown[:average_completion] = stats_data.css("div.col-xs-4")[4].css("div.col-xs-6 span.typo-top").text
 
-    trophies_by_completion_scrape = stats_data.css("div.col-xs-4")[4].css("ul.legend li")
+    games_by_completion_scrape = stats_data.css("div.col-xs-4")[4].css("ul.legend li")
 
-    trophies_by_completion_scrape.each_with_index do |completion_band, i|
-      completion_breakdown[:trophies_by_completion][i][:completion_band] = completion_band.text.gsub(/\(.*/,"").strip
-      completion_breakdown[:trophies_by_completion][i][:trophies] = completion_band.text.gsub(/.*\(/,"").gsub(")","")
+    games_by_completion_scrape.each_with_index do |completion_band, i|
+      completion_breakdown[:games_by_completion][i][:completion_band] = completion_band.text.gsub(/\(.*/,"").strip
+      completion_breakdown[:games_by_completion][i][:games] = completion_band.text.gsub(/.*\(/,"").gsub(")","")
     end
 
     player[:completion_breakdown] = completion_breakdown
@@ -242,7 +242,7 @@ class Scraper
     if first_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t","") != "Missing Timestamp"
       player[:first_trophy][:time] = DateTime.parse(first_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
     else
-      player[:first_trophy][:time] = "Unknown (missing timestamp)"
+      player[:first_trophy][:time] = "unknown (missing timestamp)"
     end
 
     latest_trophy_data = Nokogiri::HTML(OpenURI.open_uri(BASE_PATH + player[:psn_id] + "/log"))
@@ -256,15 +256,17 @@ class Scraper
     if latest_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t","") != "Missing Timestamp"
       player[:latest_trophy][:time] = DateTime.parse(latest_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
     else
-      player[:latest_trophy][:time] = "Unknown (missing timestamp)"
+      player[:latest_trophy][:time] = "unknown (missing timestamp)"
     end
 
     player[:latest_trophy][:time] = DateTime.parse(latest_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
 
-    if player[:first_trophy][:time].class == DateTime && player[:latest_trophy][:time].class == DateTime
-      player[:length_of_service] = TimeDifference.between(player[:first_trophy][:time],player[:latest_trophy][:time]).humanize
+    if player[:first_trophy][:time] == player[:latest_trophy][:time]
+      player[:length_of_service] = "not applicable (only one trophy)"
+    elsif player[:first_trophy][:time].class == DateTime && player[:latest_trophy][:time].class == DateTime
+      player[:length_of_service] = TimeDifference.between(player[:first_trophy][:time],player[:latest_trophy][:time]).humanize.downcase
     else
-      player[:length_of_service] = "Unknown (missing timestamp(s))"
+      player[:length_of_service] = "unknown (missing timestamp(s))"
     end
 
     player

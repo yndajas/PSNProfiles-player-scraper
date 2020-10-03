@@ -21,7 +21,6 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
 ### Basics
 * PSN ID (as capitalised by the player) and comment
 * current level and progress to next level (% and points to go)
-* country
 * rank by world and country<sup>2</sup>
 * basic stats:
   * overall completion rate<sup>3</sup>

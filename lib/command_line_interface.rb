@@ -2,7 +2,14 @@ class CommandLineInterface
   attr_accessor :player, :player_2
 
   def run
-    puts "\nWelcome to the PSNProfiles player scraper!"
+    puts "\nこんにちは！ Welcome to the PSNProfiles player scraper!"
+
+    self.get_player
+
+    puts "\nさようなら！ Goodbye!\n\n"
+  end
+
+  def get_player
     puts "\nPlease enter a PSN ID:"
 
     self.player = Player.new(self.valid_profile_data)
@@ -17,22 +24,25 @@ class CommandLineInterface
     puts "  Enter \"1\" to view player data"
     puts "  Enter \"2\" to export player data"
     puts "  Enter \"3\" to compare with another player"
-    puts "  Enter \"exit\" to exit"
+    puts "  Enter \"4\" to change player"
+    puts "  Enter \"exit\" to exit\n\n"
 
     choice = ""
 
-    choice = gets.strip until choice == "1" || choice == "2" || choice == "3" || choice.downcase == "exit"
+    choice = gets.strip until choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice.downcase == "exit"
 
     if choice == "1"
       self.player.view(self)
     elsif choice == "2"
       self.player.export(self)
     elsif choice == "3"
-      puts "\nEnter the PSN ID of the player you wish to compare with"
+      puts "\nEnter the PSN ID of the player you wish to compare with:"
 
       self.player_2 = Player.new(self.valid_profile_data)
 
       Player.compare(self.player, self.player_2, self)
+    elsif choice == "4"
+      self.get_player
     end
   end
 
