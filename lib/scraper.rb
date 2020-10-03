@@ -6,7 +6,15 @@ class Scraper
   end
 
   def self.valid?(profile)
-    profile.css("span.username").length == 0 ? false : true
+    # first check is if the URL redirected to the homepage (untracked profile)
+    if profile.css("span.username").length == 0
+      false
+    # second check is if the player has public trophy data on their profile (via the message that displays for those who don't)
+    elsif profile.css("h1").first != nil && profile.css("h1").first.text[0..2] == "Aww"
+      false
+    else
+      true
+    end
   end
 
   def self.scrape(profile_data)
@@ -230,7 +238,12 @@ class Scraper
     player[:first_trophy][:trophy] = first_trophy_data.css("a.title")[0].text
     player[:first_trophy][:game] = first_trophy_data.css("img.game")[0].attribute("title").value
     player[:first_trophy][:description] = first_trophy_data.css("td")[2].text.gsub(player[:first_trophy][:trophy],"").strip
-    player[:first_trophy][:time] = DateTime.parse(first_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
+
+    if first_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t","") != "Missing Timestamp"
+      player[:first_trophy][:time] = DateTime.parse(first_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
+    else
+      player[:first_trophy][:time] = "Unknown (missing timestamp)"
+    end
 
     latest_trophy_data = Nokogiri::HTML(OpenURI.open_uri(BASE_PATH + player[:psn_id] + "/log"))
 
@@ -239,9 +252,20 @@ class Scraper
     player[:latest_trophy][:trophy] = latest_trophy_data.css("a.title")[0].text
     player[:latest_trophy][:game] = latest_trophy_data.css("img.game")[0].attribute("title").value
     player[:latest_trophy][:description] = latest_trophy_data.css("td")[2].text.gsub(player[:latest_trophy][:trophy],"").strip
+
+    if latest_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t","") != "Missing Timestamp"
+      player[:latest_trophy][:time] = DateTime.parse(latest_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
+    else
+      player[:latest_trophy][:time] = "Unknown (missing timestamp)"
+    end
+
     player[:latest_trophy][:time] = DateTime.parse(latest_trophy_data.css("td")[5].text.gsub("\n"," ").strip.gsub("\r","").gsub("\t",""))
 
-    player[:length_of_service] = TimeDifference.between(player[:first_trophy][:time],player[:latest_trophy][:time]).humanize
+    if player[:first_trophy][:time].class == DateTime && player[:latest_trophy][:time].class == DateTime
+      player[:length_of_service] = TimeDifference.between(player[:first_trophy][:time],player[:latest_trophy][:time]).humanize
+    else
+      player[:length_of_service] = "Unknown (missing timestamp(s))"
+    end
 
     player
   end

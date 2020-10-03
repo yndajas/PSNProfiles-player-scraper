@@ -3,22 +3,22 @@ Scrapes and presents data from PSNProfiles player pages using a CLI
 
 ## Installation
 
-- install Ruby
-- `gem install bundler`
-- `cd` into PSNProfiles-profile-scraper directory
-- `bundle install`
+Install Ruby ([help](https://www.ruby-lang.org/en/documentation/installation)), then in a terminal:
+1. `gem install bundler`
+2. change directory to PSNProfiles-profile-scraper<br>(e.g. `cd "C:\Users\yndaj\Downloads\PSNProfiles-profile-scraper"`)
+3. `bundle install`
 
 ## Usage
 
-- make sure you're `cd`ed into the PSNProfiles-profile-scraper directory
-- `ruby bin/scrape`
-- enter a PSN ID
+In a terminal:
+1. Make sure you're in the PSNProfiles-profile-scraper directory (via `cd`)
+2. `ruby bin/scrape`
 
 ## Features
 
 Retrieve the following collections of data about PlayStation players<sup>1</sup>, compare two players and export player data to XML/JSON.
 
-#### Basics
+### Basics
 * PSN ID (as capitalised by the player) and comment
 * current level and progress to next level (% and points to go)
 * country
@@ -29,13 +29,13 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
   * average PSNProfiles trophy rarity
   * trophies per day (since first trophy)
 
-#### Totals
+### Totals
 * trophies, platinums, golds, silvers and bronzes
 * unearned trophies
 * games played
 * games completed
 
-#### Summaries (number of x by y)
+### Summaries (number of x by y)
 * number of trophies by:
   * type
   * rarity band<sup>5</sup>
@@ -43,7 +43,7 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
   * platform
   * completion band<sup>6</sup>
 
-#### Length of service (inc. first/latest trophy)
+### Length of service (inc. first/latest trophy)
   * first trophy and latest trophy:
     * name
     * game
@@ -51,7 +51,7 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
     * date/time earned
   * time between first and latest trophies ("length of service")
 
-#### Collections (recent trophies/games and rarest trophies)
+### Collections (recent trophies/games and rarest trophies)
 * recent trophies (up to 12):
   * name
   * game
