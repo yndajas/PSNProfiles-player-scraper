@@ -70,7 +70,7 @@ class Player
 
   def view_basics
     # puts data from README basic section
-
+    
     self.view_menu
   end
 

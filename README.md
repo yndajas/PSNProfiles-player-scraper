@@ -100,6 +100,10 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
 
 <sup>7</sup> weighted by trophy type, including platinum - see (3) for points by type.
 
+## To do
+
+- add view methods (for single player and player comparison)
+
 ## Disclaimer
 
 This app and its creator have no affiliation with PSNProfiles or the PlayStation Network/PlayStation beyond the creator's use of both services.
