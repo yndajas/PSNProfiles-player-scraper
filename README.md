@@ -1,5 +1,5 @@
 # PSNProfiles player scraper
-Scrapes and presents data from PSNProfiles player pages using a CLI
+Scrape PSNProfiles player pages using a command line interface/terminal, then view individual data, export to XML/JSON or compare with another player.
 
 ## Installation
 
