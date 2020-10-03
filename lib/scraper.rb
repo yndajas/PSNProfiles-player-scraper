@@ -238,8 +238,6 @@ class Scraper
 
     player[:length_of_service] = TimeDifference.between(player[:first_trophy][:time],player[:latest_trophy][:time]).humanize
 
-    binding.pry
-
     player
   end
 end
