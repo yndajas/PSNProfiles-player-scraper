@@ -254,7 +254,7 @@ class Player
     File.write(filename, self.hash.to_xml) if format.upcase == "XML"
     File.write(filename, JSON.pretty_generate(self.hash)) if format.upcase == "JSON"
 
-    puts "\nData successfully exported to \"#{filename}!\n"
+    puts "\nData successfully exported to \"#{filename}\"!\n"
 
     cli.main_menu
   end
