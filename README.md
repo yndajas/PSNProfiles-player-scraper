@@ -101,6 +101,14 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
 
 <sup>7</sup> weighted by trophy type, including platinum - see (3) for points by type.
 
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at [https://github.com/yndajas/PSNProfiles-player-scraper](https://github.com/yndajas/PSNProfiles-player-scraper).
+
+## Licence
+
+This gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
 ## Disclaimer
 
 This app and its creator have no affiliation with PSNProfiles or the PlayStation Network/PlayStation beyond the creator's use of both services.
