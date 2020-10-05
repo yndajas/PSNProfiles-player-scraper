@@ -5,7 +5,8 @@ class Scraper
     Nokogiri::HTML(OpenURI.open_uri(BASE_PATH + psn_id))
   end
 
-  def self.valid?(profile)
+  def self.valid_profile(psn_id)
+    profile = Scraper.open(psn_id)
     # first check is if the URL redirected to the homepage (untracked profile)
     if profile.css("span.username").length == 0
       false
@@ -13,7 +14,7 @@ class Scraper
     elsif profile.css("h1").first != nil && profile.css("h1").first.text[0..2] == "Aww"
       false
     else
-      true
+      profile
     end
   end
 
@@ -129,13 +130,11 @@ class Scraper
       if game.css("div.small-info")[1] == nil
         recent_games[i][:latest_trophy_date] = "not applicable (no trophies earned)"
       elsif game.css("div.small-info")[1].css("bullet").length > 0
-        ## scrape last trophy date before bullet and time to complete/platinum after bullet
         recent_games[i][:latest_trophy_date] = DateTime.parse(game.css("div.small-info")[1].text.strip.gsub(/\n.*/,""))
 
         speed_text = game.css("div.small-info")[1].text.strip.gsub("\n","").gsub(/.*(\u2022)/,"").gsub("\t","").strip.gsub("                                           ","")
         recent_games[i][:speedrun_type] = speed_text.gsub(/ .*/,"") == "Completed" ? "Completion" : "Platinum"
         recent_games[i][:speedrun_time] = speed_text.gsub(/.* in /,"").gsub(",", " and")
-        ## check if text is platinum or complete and fill in separate attribute based on which it is
       else
         recent_games[i][:latest_trophy_date] = DateTime.parse(game.css("div.small-info")[1].text.strip)
       end

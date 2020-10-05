@@ -48,18 +48,15 @@ class CommandLineInterface
 
   def valid_profile_data
     psn_id = gets.strip
+    valid_profile = Scraper.valid_profile(psn_id)
 
-    profile = Scraper.open(psn_id)
-    valid = Scraper.valid?(profile)
-
-    until valid == true
+    until valid_profile != false
       puts "\nInvalid PSN ID. Please try again or refer to note (1) of the README for reasons you might be seeing this error"
       psn_id = gets.strip
-      profile = Scraper.open(psn_id)
-      valid = Scraper.valid?(profile)
+      valid_profile = Scraper.valid_profile(psn_id)
     end
 
-    player_data = Scraper.scrape(profile)
+    player_data = Scraper.scrape(valid_profile)
 
     player_data
   end

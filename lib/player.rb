@@ -1,10 +1,6 @@
 class Player
   attr_accessor :psn_id, :comment, :level, :level_progress, :next_level_in, :country, :total_trophies, :total_platinums, :total_golds, :total_silvers, :total_bronzes, :games_played, :completed_games, :overall_completion, :unearned_trophies, :trophies_per_day, :world_rank, :country_rank, :recent_trophies, :recent_games, :rarest_trophies, :games_by_platform, :trophies_by_type, :rarity_breakdown, :completion_breakdown, :first_trophy, :latest_trophy, :length_of_service
 
-  # add attr_readers for all the keys in the scraped player_data hash, and add reader methods to get the sub-hashes/attributes
-  # use meta-programming (#send) in #initialize to populate all the instance variables
-  # add methods for putting (or returning?) each of the five collections of data outlined in the README in an easily readable format
-
   @@all = []
 
   def initialize(player_data)
