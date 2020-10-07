@@ -38,7 +38,7 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
 
 ### Summaries (number of x by y)
 * number of trophies by:
-  * type
+  * grade
   * rarity band<sup>5</sup>
 * number of games by:
   * platform
