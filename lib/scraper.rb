@@ -161,7 +161,7 @@ class Scraper
       rarest_trophies[i][:trophy] = trophy.css("td")[1].css("a")[0].text
       rarest_trophies[i][:game] = trophy.css("td")[1].css("a")[1].text
       rarest_trophies[i][:PSNProfiles_rarity] = trophy.css("td")[2].css("span")[0].text
-      rarest_trophies[i][:type] = trophy.css("td")[3].css("img").attribute("title").value
+      rarest_trophies[i][:grade] = trophy.css("td")[3].css("img").attribute("title").value
     end
 
     player[:rarest_trophies] = rarest_trophies
@@ -183,16 +183,16 @@ class Scraper
 
     player[:games_by_platform] = games_by_platform
 
-    trophies_by_type = [{},{},{},{}]
+    trophies_by_grade = [{},{},{},{}]
 
-    trophies_by_type_scrape = stats_data.css("div.col-xs-4")[1].css("ul.legend li")
+    trophies_by_grade_scrape = stats_data.css("div.col-xs-4")[1].css("ul.legend li")
 
-    trophies_by_type_scrape.each_with_index do |type, i|
-      trophies_by_type[i][:type] = type.text.gsub(/\(.*/,"").strip
-      trophies_by_type[i][:trophies] = type.text.gsub(/.*\(/,"").gsub(")","")
+    trophies_by_grade_scrape.each_with_index do |grade, i|
+      trophies_by_grade[i][:grade] = grade.text.gsub(/\(.*/,"").strip
+      trophies_by_grade[i][:trophies] = grade.text.gsub(/.*\(/,"").gsub(")","")
     end
 
-    player[:trophies_by_type] = trophies_by_type
+    player[:trophies_by_grade] = trophies_by_grade
 
     rarity_breakdown = {:average_rarity => "",:trophies_by_rarity => [{},{},{},{},{}]}
 

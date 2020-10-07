@@ -1,5 +1,5 @@
 class Player
-  attr_accessor :psn_id, :comment, :level, :level_progress, :next_level_in, :country, :total_trophies, :total_platinums, :total_golds, :total_silvers, :total_bronzes, :games_played, :completed_games, :overall_completion, :unearned_trophies, :trophies_per_day, :world_rank, :country_rank, :recent_trophies, :recent_games, :rarest_trophies, :games_by_platform, :trophies_by_type, :rarity_breakdown, :completion_breakdown, :first_trophy, :latest_trophy, :length_of_service
+  attr_accessor :psn_id, :comment, :level, :level_progress, :next_level_in, :country, :total_trophies, :total_platinums, :total_golds, :total_silvers, :total_bronzes, :games_played, :completed_games, :overall_completion, :unearned_trophies, :trophies_per_day, :world_rank, :country_rank, :recent_trophies, :recent_games, :rarest_trophies, :games_by_platform, :trophies_by_grade, :rarity_breakdown, :completion_breakdown, :first_trophy, :latest_trophy, :length_of_service
 
   @@all = []
 
@@ -90,8 +90,8 @@ class Player
 
   def view_summaries
     # puts data from README summaries section
-    puts "\nTrophies by type"
-    self.trophies_by_type.each {|type_data| puts "  #{type_data[:type]}: #{type_data[:trophies]}"}
+    puts "\nTrophies by grade"
+    self.trophies_by_grade.each {|grade_data| puts "  #{grade_data[:grade]}: #{grade_data[:trophies]}"}
 
     puts "\nTrophies by rarity"
     self.trophies_by_rarity.each {|rarity_data| puts "  #{rarity_data[:rarity_band]}: #{rarity_data[:trophies]}"}
@@ -209,7 +209,7 @@ class Player
 
     self.rarest_trophies.each_with_index do |trophy_data, i|
       puts "\n(#{i + 1})  #{trophy_data[:trophy]} (#{trophy_data[:game]})"
-      puts "     #{trophy_data[:type]} | PSNProfiles rarity: #{trophy_data[:PSNProfiles_rarity]}"
+      puts "     #{trophy_data[:grade]} | PSNProfiles rarity: #{trophy_data[:PSNProfiles_rarity]}"
     end
 
     self.view_collections_menu
