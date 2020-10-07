@@ -49,10 +49,8 @@ class Scraper
 
     stats_flex = profile_data.css("span.stat.grow")
 
-    stats_flex_data = []
-
-    stats_flex.each do |stat|
-      stats_flex_data << stat.to_s.gsub(/(<span).*(">)/,"").gsub(/(<span>).*/,"").gsub(/(<a).*(">)/,"").gsub(/(<\/a>)/,"").gsub(/(<\/span>)/,"").strip
+    stats_flex_data = stats_flex.collect do |stat|
+      stat.to_s.gsub(/(<span).*(">)/,"").gsub(/(<span>).*/,"").gsub(/(<a).*(">)/,"").gsub(/(<\/a>)/,"").gsub(/(<\/span>)/,"").strip
     end
 
     stats_flex_data.delete_at(5) # delete (unwanted) profile views count
@@ -95,9 +93,7 @@ class Scraper
       recent_games[i][:game] = game.css("a.title").text
 
       if game.css("span.tag.platform").length > 1
-        platforms = []
-        game.css("span.tag.platform").each {|platform| platforms << platform.text}
-        recent_games[i][:platform] = platforms.join("/")
+        recent_games[i][:platform] = game.css("span.tag.platform").collect {|platform| platform.text}.join("/")
       else
         recent_games[i][:platform] = game.css("span.tag.platform").text
       end
