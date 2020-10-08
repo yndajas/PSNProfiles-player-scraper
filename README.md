@@ -78,7 +78,7 @@ Retrieve the following collections of data about PlayStation players<sup>1</sup>
 <sup>2</sup> of profiles tracked by PSNProfiles - see (1) for details about tracking.
 
 <sup>3</sup> overall completion rate is a weighted percentage of non-platinum trophies earned across all games with at least one trophy earned. The weighting is by trophy type, as per the points each are worth on the PlayStation Network itself:
-* platinum: 180 points (platinums are not included in the calculation)
+* platinum: 180 points (platinums are not included in the calculation; note that a change to the PlayStation trophy system implemented on 7/8 October raised the platinum value to 300 points, however the PSNProfiles site is yet to be updated as of 8 October 2020)
 * gold: 90 points
 * silver: 30 points
 * bronze: 15 points
