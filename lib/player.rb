@@ -225,7 +225,9 @@ class Player
       directory = gets.strip
     end
 
-    directory += "\\" if directory[-1] != "\\" && directory[-1] != "/"
+    directory = directory.gsub("\\","/")
+
+    directory += "/" if directory[-1] != "/"
 
     puts "\nWhat format: XML or JSON?"
 
