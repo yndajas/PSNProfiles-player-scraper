@@ -1,4 +1,4 @@
-class Scraper
+class PSNProfiles_player_scraper::Scraper
   BASE_PATH = "https://psnprofiles.com/"
 
   def self.open(psn_id)
@@ -6,7 +6,7 @@ class Scraper
   end
 
   def self.valid_profile(psn_id)
-    profile = Scraper.open(psn_id)
+    profile = PSNProfiles_player_scraper::Scraper.open(psn_id)
     # first check is if the URL redirected to the homepage (untracked profile)
     if profile.css("span.username").length == 0
       false

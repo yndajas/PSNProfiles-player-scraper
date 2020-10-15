@@ -1,4 +1,4 @@
-class Player
+class PSNProfiles_player_scraper::Player
   attr_accessor :psn_id, :comment, :level, :level_progress, :next_level_in, :country, :total_trophies, :total_platinums, :total_golds, :total_silvers, :total_bronzes, :games_played, :completed_games, :overall_completion, :unearned_trophies, :trophies_per_day, :world_rank, :country_rank, :recent_trophies, :recent_games, :rarest_trophies, :games_by_platform, :trophies_by_grade, :rarity_breakdown, :completion_breakdown, :first_trophy, :latest_trophy, :length_of_service
 
   @@all = []
@@ -109,12 +109,12 @@ class Player
     puts "\nFirst trophy"
     puts "  #{self.first_trophy[:trophy]} (#{self.first_trophy[:game]})"
     puts "  #{self.first_trophy[:description]}"
-    puts "\n  Earned: #{Player.trophy_earned_date(self, "first")}"
+    puts "\n  Earned: #{PSNProfiles_player_scraper::Player.trophy_earned_date(self, "first")}"
 
     puts "\nLatest trophy"
     puts "  #{self.latest_trophy[:trophy]} (#{self.latest_trophy[:game]})"
     puts "  #{self.latest_trophy[:description]}"
-    puts "\n  Earned: #{Player.trophy_earned_date(self, "latest")}"
+    puts "\n  Earned: #{PSNProfiles_player_scraper::Player.trophy_earned_date(self, "latest")}"
 
     puts "\nLength of service: #{self.length_of_service}"
 
@@ -292,8 +292,8 @@ class Player
     puts "  Completed: #{player_one.completed_games} | #{player_two.completed_games}"
     puts "  Played: #{player_one.games_played} | #{player_two.games_played}"
 
-    puts "\nFirst trophy earned: #{Player.trophy_earned_date(player_one, "first")} | #{Player.trophy_earned_date(player_two, "first")}"
-    puts "Latest trophy earned: #{Player.trophy_earned_date(player_one, "latest")} | #{Player.trophy_earned_date(player_two, "latest")}"
+    puts "\nFirst trophy earned: #{PSNProfiles_player_scraper::Player.trophy_earned_date(player_one, "first")} | #{PSNProfiles_player_scraper::Player.trophy_earned_date(player_two, "first")}"
+    puts "Latest trophy earned: #{PSNProfiles_player_scraper::Player.trophy_earned_date(player_one, "latest")} | #{PSNProfiles_player_scraper::Player.trophy_earned_date(player_two, "latest")}"
     puts "Length of service: #{player_one.length_of_service} | #{player_two.length_of_service}"
 
     cli.main_menu

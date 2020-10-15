@@ -1,4 +1,4 @@
-class CommandLineInterface
+class PSNProfiles_player_scraper::CommandLineInterface
   attr_accessor :player, :player_2
 
   def run
@@ -12,7 +12,7 @@ class CommandLineInterface
   def get_player
     puts "\nPlease enter a PSN ID:"
 
-    self.player = Player.new(self.valid_profile_data)
+    self.player = PSNProfiles_player_scraper::Player.new(self.valid_profile_data)
 
     puts "\nPlayer successfully scraped!"
 
@@ -38,9 +38,9 @@ class CommandLineInterface
     elsif choice == "3"
       puts "\nEnter the PSN ID of the player you wish to compare with:"
 
-      self.player_2 = Player.new(self.valid_profile_data)
+      self.player_2 = PSNProfiles_player_scraper::Player.new(self.valid_profile_data)
 
-      Player.compare(self.player, self.player_2, self)
+      PSNProfiles_player_scraper::Player.compare(self.player, self.player_2, self)
     elsif choice == "4"
       self.get_player
     end
@@ -48,15 +48,15 @@ class CommandLineInterface
 
   def valid_profile_data
     psn_id = gets.strip
-    valid_profile = Scraper.valid_profile(psn_id)
+    valid_profile = PSNProfiles_player_scraper::Scraper.valid_profile(psn_id)
 
     until valid_profile != false
       puts "\nInvalid PSN ID. Please try again or refer to note (1) of the README for reasons you might be seeing this error"
       psn_id = gets.strip
-      valid_profile = Scraper.valid_profile(psn_id)
+      valid_profile = PSNProfiles_player_scraper::Scraper.valid_profile(psn_id)
     end
 
-    player_data = Scraper.scrape(valid_profile)
+    player_data = PSNProfiles_player_scraper::Scraper.scrape(valid_profile)
 
     player_data
   end
