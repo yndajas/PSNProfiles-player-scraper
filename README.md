@@ -1,11 +1,11 @@
 # PSNProfiles player scraper
 Scrape PSNProfiles player pages using a command-line interface/terminal, then view individual data, export to XML/JSON or compare with another player.
 
-You can view a demo of the app in action over on YouTube: [youtube.com/watch?v=l1yA_LfLz-c](https://www.youtube.com/watch?v=l1yA_LfLz-c)
+You can view a demo of the app in action over on YouTube: <a href="https://www.youtube.com/watch?v=l1yA_LfLz-c" target="_blank" title="app demo on YouTube">youtube.com/watch?v=l1yA_LfLz-c</a>)
 
 ## Installation
 
-Install Ruby ([help](https://www.ruby-lang.org/en/documentation/installation)), then in a terminal:
+Install Ruby (<a href="https://www.ruby-lang.org/en/documentation/installation" target="_blank" title="Ruby installation">help</a>), then in a terminal:
 1. `gem install bundler`
 2. change directory to PSNProfiles-profile-scraper<br>(e.g. `cd "C:\Users\yndaj\Downloads\PSNProfiles-profile-scraper"`)
 3. `bundle install`
