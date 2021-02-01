@@ -1,7 +1,7 @@
 # PSNProfiles player scraper
 Scrape PSNProfiles player pages using a command-line interface/terminal, then view individual data, export to XML/JSON or compare with another player.
 
-You can view a demo of the app in action over on YouTube: <a href="https://www.youtube.com/watch?v=l1yA_LfLz-c" target="_blank" title="app demo on YouTube">youtube.com/watch?v=l1yA_LfLz-c</a>)
+You can view a demo of the app in action over on YouTube: <a href="https://www.youtube.com/watch?v=l1yA_LfLz-c" target="_blank" title="app demo on YouTube">youtube.com/watch?v=l1yA_LfLz-c</a>
 
 ## Installation
 
