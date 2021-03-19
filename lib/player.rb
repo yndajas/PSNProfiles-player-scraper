@@ -97,7 +97,7 @@ class PSNProfiles_player_scraper::Player
     self.trophies_by_rarity.each {|rarity_data| puts "  #{rarity_data[:rarity_band]}: #{rarity_data[:trophies]}"}
 
     puts "\nGames by platform"
-    self.games_by_platform.each {|platform_data| puts "  #{platform_data[:platform]}: #{platform_data[:trophies]}"}
+    self.games_by_platform.each {|platform_data| puts "  #{platform_data[:platform]}: #{platform_data[:games]}"}
 
     puts "\nGames by completion percentage"
     self.games_by_completion.each {|completion_data| puts "  #{completion_data[:completion_band]}: #{completion_data[:games]}"}

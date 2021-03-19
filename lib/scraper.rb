@@ -174,7 +174,7 @@ class PSNProfiles_player_scraper::Scraper
 
     games_by_platform_scrape.each_with_index do |platform, i|
       games_by_platform[i][:platform] = platform.text.gsub(/\(.*/,"").strip
-      games_by_platform[i][:trophies] = platform.text.gsub(/.*\(/,"").gsub(")","")
+      games_by_platform[i][:games] = platform.text.gsub(/.*\(/,"").gsub(")","")
     end
 
     player[:games_by_platform] = games_by_platform
