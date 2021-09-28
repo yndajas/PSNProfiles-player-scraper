@@ -3,6 +3,8 @@ Scrape PSNProfiles player pages using a command-line interface/terminal, then vi
 
 You can view a demo of the app in action over on YouTube: <a href="https://www.youtube.com/watch?v=l1yA_LfLz-c" target="_blank" title="app demo on YouTube">youtube.com/watch?v=l1yA_LfLz-c</a>
 
+[![YouTube demo](https://img.youtube.com/vi/l1yA_LfLz-c/hqdefault.jpg)](http://www.youtube.com/watch?v=l1yA_LfLz-c)
+
 ## Installation
 
 Install Ruby (<a href="https://www.ruby-lang.org/en/documentation/installation" target="_blank" title="Ruby installation">help</a>), then in a terminal:
